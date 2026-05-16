@@ -83,11 +83,6 @@ const Dashboard = () => {
           <h1>Dashboard</h1>
           <p>Welcome back! Here's your audio detection overview</p>
         </div>
-        <Link to="/live">
-          <Button variant="primary" icon={<FaMicrophone />}>
-            New Analysis
-          </Button>
-        </Link>
       </div>
 
       <div className="dashboard-content">
@@ -112,10 +107,7 @@ const Dashboard = () => {
           <div className="stat-content">
             <h3>Total Detections</h3>
             <div className="stat-value">{stats.totalDetections}</div>
-            <div className="stat-trend">
-              <FaArrowUp className="trend-up" />
-              <span>+12% from last week</span>
-            </div>
+
           </div>
         </div>
 
@@ -126,9 +118,7 @@ const Dashboard = () => {
           <div className="stat-content">
             <h3>Real Voices</h3>
             <div className="stat-value">{stats.realVoices}</div>
-            <div className="stat-percent">
-              {stats.totalDetections > 0 ? ((stats.realVoices / stats.totalDetections) * 100).toFixed(1) : 0}%
-            </div>
+
           </div>
         </div>
 
@@ -139,9 +129,7 @@ const Dashboard = () => {
           <div className="stat-content">
             <h3>Fake Voices</h3>
             <div className="stat-value">{stats.fakeVoices}</div>
-            <div className="stat-percent">
-              {stats.totalDetections > 0 ? ((stats.fakeVoices / stats.totalDetections) * 100).toFixed(1) : 0}%
-            </div>
+
           </div>
         </div>
 
@@ -152,10 +140,7 @@ const Dashboard = () => {
           <div className="stat-content">
             <h3>Avg Confidence</h3>
             <div className="stat-value">{stats.avgConfidence}%</div>
-            <div className="stat-trend">
-              <FaArrowUp className="trend-up" />
-              <span>+5% improvement</span>
-            </div>
+
           </div>
         </div>
       </div>

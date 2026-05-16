@@ -8,29 +8,34 @@ import {
   FaCog,
   FaShieldAlt,
   FaChartLine,
-  FaDatabase
+  FaDatabase,
+  FaBars
 } from 'react-icons/fa';
 import './sidebar.css';
 
-const Sidebar = ({ sidebarOpen }) => {
+const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const menuItems = [
-    { path: '/', icon: <FaTachometerAlt />, name: 'Dashboard', description: 'Overview & Stats' },
-    { path: '/live', icon: <FaMicrophone />, name: 'Live Analysis', description: 'Real-time detection' },
-    { path: '/history', icon: <FaHistory />, name: 'History', description: 'Past detections' },
-    { path: '/about', icon: <FaInfoCircle />, name: 'About', description: 'System info' },
-    { path: '/settings', icon: <FaCog />, name: 'Settings', description: 'Preferences' },
+    { path: '/dashboard', icon: <FaTachometerAlt />, name: 'Dashboard', description: 'Overview & Stats' },
+    { path: '/live',      icon: <FaMicrophone />,    name: 'Live Analysis', description: 'Real-time detection' },
+    { path: '/history',   icon: <FaHistory />,       name: 'History', description: 'Past detections' },
+    { path: '/about',     icon: <FaInfoCircle />,    name: 'About', description: 'System info' },
   ];
 
   return (
     <div className={`sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
       <div className="sidebar-brand">
-        <FaShieldAlt className="brand-icon" />
-        {sidebarOpen && (
-          <div className="brand-info">
-            <h3>AudioGuard</h3>
-            <p>v2.0.0</p>
-          </div>
-        )}
+        <div className="brand-left">
+          <FaShieldAlt className="brand-icon" />
+          {sidebarOpen && (
+            <div className="brand-info">
+              <h3>AudioGuard</h3>
+              <p>v2.0.0</p>
+            </div>
+          )}
+        </div>
+        <button className="sidebar-toggle-btn" onClick={() => setSidebarOpen(!sidebarOpen)}>
+          <FaBars />
+        </button>
       </div>
 
       <nav className="sidebar-nav">

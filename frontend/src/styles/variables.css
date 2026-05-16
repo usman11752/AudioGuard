@@ -1,9 +1,10 @@
 :root {
-  /* Colors */
-  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --primary: #667eea;
-  --primary-dark: #5a67d8;
-  --secondary: #764ba2;
+  /* Colors - Updated to Teal/Gold Theme */
+  --primary-gradient: linear-gradient(135deg, #0d5c5c 0%, #073b3b 100%);
+  --primary: #0d5c5c;
+  --primary-dark: #073b3b;
+  --secondary: #10b981;
+  --secondary-glow: rgba(16, 185, 129, 0.3);
   --success: #10b981;
   --danger: #ef4444;
   --warning: #f59e0b;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FaCog, FaBell, FaMoon, FaTrash, FaCheckCircle, FaSyncAlt } from 'react-icons/fa';
+import { FaCog, FaBell, FaMoon, FaTrash, FaCheckCircle, FaSyncAlt, FaUser, FaLock, FaCamera, FaEnvelope } from 'react-icons/fa';
 import './Setting.css';
 
 const defaultSettings = {
@@ -111,6 +111,61 @@ const Settings = () => {
       )}
 
       <div className="settings-container">
+        {/* ── USER PROFILE SECTION ── */}
+        <div className="settings-section">
+          <div className="section-header">
+            <FaUser className="section-icon" />
+            <h2>User Profile</h2>
+          </div>
+          <div className="profile-edit-area">
+            <div className="profile-pic-container">
+              <div className="profile-pic-wrapper">
+                <img src="https://ui-avatars.com/api/?name=User+Account&background=0d5c5c&color=fff&size=128" alt="Profile" />
+                <button className="change-pic-btn" title="Change Photo">
+                  <FaCamera />
+                </button>
+              </div>
+              <div className="profile-status">
+                <span className="status-badge">Verified Account</span>
+              </div>
+            </div>
+            <div className="profile-form-grid">
+              <div className="input-group">
+                <label><FaUser /> Full Name</label>
+                <input type="text" defaultValue="User Account" placeholder="Your name" />
+              </div>
+              <div className="input-group">
+                <label><FaEnvelope /> Email Address</label>
+                <input type="email" defaultValue="user@audioguard.ai" placeholder="Your email" disabled />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── SECURITY SECTION ── */}
+        <div className="settings-section">
+          <div className="section-header">
+            <FaLock className="section-icon" />
+            <h2>Account Security</h2>
+          </div>
+          <div className="security-form">
+            <div className="input-group">
+              <label>Current Password</label>
+              <input type="password" placeholder="••••••••" />
+            </div>
+            <div className="security-row">
+              <div className="input-group">
+                <label>New Password</label>
+                <input type="password" placeholder="New password" />
+              </div>
+              <div className="input-group">
+                <label>Confirm Password</label>
+                <input type="password" placeholder="Confirm password" />
+              </div>
+            </div>
+            <button className="update-pwd-btn">Update Password</button>
+          </div>
+        </div>
         <div className="settings-section">
           <div className="section-header">
             <FaMoon className="section-icon" />

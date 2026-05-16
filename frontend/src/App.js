@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
+import LandingPage from './Pages/Landing/LandingPage';
 import Dashboard from './Pages/Dashboard/Dashboard';
 import LiveAnalysis from './Pages/LiveAnalysis/LiveAnalysis';
 import History from './Pages/History/History';
@@ -29,17 +30,25 @@ function App() {
 
   return (
     <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/live" element={<LiveAnalysis />} />
-          <Route path="/history" element={<History />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-        </Routes>
-      </Layout>
+      <Routes>
+        {/* Standalone pages — no sidebar/navbar */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+
+        {/* Dashboard pages — wrapped in Layout (sidebar + navbar) */}
+        <Route path="/*" element={
+          <Layout>
+            <Routes>
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="live"      element={<LiveAnalysis />} />
+              <Route path="history"   element={<History />} />
+              <Route path="about"     element={<About />} />
+              <Route path="settings"  element={<Settings />} />
+            </Routes>
+          </Layout>
+        } />
+      </Routes>
     </Router>
   );
 }

@@ -13,7 +13,6 @@ function AudioUploader() {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      // Validate file type
       if (!file.type.startsWith('audio/') && !file.name.match(/\.(wav|mp3|ogg|aac|flac|m4a|wma)$/i)) {
         setError('Please upload a valid audio file (WAV, MP3, OGG, AAC, etc.)');
         setSelectedFile(null);
@@ -21,7 +20,6 @@ function AudioUploader() {
         return;
       }
       
-      // Validate file size (max 10MB)
       if (file.size > 10 * 1024 * 1024) {
         setError('File size must be less than 10MB');
         setSelectedFile(null);
@@ -33,7 +31,6 @@ function AudioUploader() {
       setResult(null);
       setError(null);
       
-      // Create audio preview URL
       const previewUrl = URL.createObjectURL(file);
       setAudioPreview(previewUrl);
     }
@@ -51,17 +48,16 @@ function AudioUploader() {
 
     const formData = new FormData();
     formData.append('file', selectedFile);
+    formData.append('type', 'upload');
 
     try {
-      // Send to your Flask backend
-      const response = await axios.post('http://localhost:5000/predict', formData, {
+      const response = await axios.post('http://127.0.0.1:5000/predict', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
-        timeout: 60000, // 60 second timeout
+        timeout: 60000,
       });
       
       setResult(response.data);
 
-      // Save to history
       const historyItem = {
         id: Date.now(),
         timestamp: new Date().toLocaleString(),
@@ -76,7 +72,6 @@ function AudioUploader() {
       existingHistory.unshift(historyItem);
       localStorage.setItem('detectionHistory', JSON.stringify(existingHistory.slice(0, 50)));
       
-      // Trigger a storage event so other components (like Dashboard) can update if they are listening
       window.dispatchEvent(new Event('storage'));
     } catch (err) {
       console.error('Upload error:', err);
@@ -85,7 +80,7 @@ function AudioUploader() {
       } else if (err.response) {
         setError(err.response.data?.error || 'Server error occurred');
       } else if (err.request) {
-        setError('Cannot connect to backend server. Make sure it\'s running on http://localhost:5000');
+        setError('Cannot connect to backend server. Make sure it\'s running on http://127.0.0.1:5000');
       } else {
         setError('Failed to get a prediction. Please try again.');
       }
@@ -107,10 +102,8 @@ function AudioUploader() {
     }
   };
 
-  const getConfidenceColor = (confidence) => {
-    if (confidence >= 0.8) return '#ff4444';
-    if (confidence >= 0.6) return '#ff8844';
-    return '#ffcc44';
+  const getConfidenceColor = (isFake) => {
+    return isFake ? '#ef4444' : '#10b981';
   };
 
   return (
@@ -153,7 +146,7 @@ function AudioUploader() {
               {isLoading ? (
                 <>
                   <span className="spinner"></span>
-                  Analyzing Audio...
+                  Analyzing...
                 </>
               ) : (
                 '🔍 Detect Deepfake'
@@ -175,52 +168,38 @@ function AudioUploader() {
         )}
 
         {result && (
-          <div className={`result-card ${result.is_fake ? 'fake' : 'real'}`}>
-            <div className="result-header">
-              <div className="result-icon">
+          <div className={`result-card-compact ${result.is_fake ? 'fake' : 'real'}`}>
+            <div className="result-header-compact">
+              <div className="result-icon-compact">
                 {result.is_fake ? '🤖' : '👤'}
               </div>
-              <div className="result-title">
-                {result.is_fake ? 'FAKE VOICE DETECTED' : 'REAL VOICE CONFIRMED'}
+              <div className="result-title-compact">
+                {result.is_fake ? 'FAKE VOICE' : 'REAL VOICE'}
               </div>
             </div>
             
-            <div className="result-message">
+            <div className="result-message-compact">
               {result.message}
             </div>
             
-            <div className="confidence-section">
-              <div className="confidence-label">Confidence Score</div>
-              <div className="confidence-value">
-                {(result.confidence * 100).toFixed(1)}%
-              </div>
-              <div className="confidence-bar">
+            <div className="confidence-section-compact">
+              <div className="confidence-label-compact">Confidence: {(result.confidence * 100).toFixed(1)}%</div>
+              <div className="confidence-bar-compact">
                 <div 
-                  className="confidence-fill" 
+                  className="confidence-fill-compact" 
                   style={{ 
                     width: `${result.confidence * 100}%`,
-                    backgroundColor: getConfidenceColor(result.confidence)
+                    backgroundColor: getConfidenceColor(result.is_fake)
                   }}
                 ></div>
               </div>
             </div>
             
-            <div className="result-details">
-              <div className="detail-item">
-                <span className="detail-label">Analysis Method:</span>
-                <span className="detail-value">Deep Neural Network</span>
-              </div>
-              <div className="detail-item">
-                <span className="detail-label">Timestamp:</span>
-                <span className="detail-value">{new Date().toLocaleString()}</span>
+            <div className="result-details-compact">
+              <div className="detail-item-compact">
+                <span className="detail-value-compact">{new Date().toLocaleString()}</span>
               </div>
             </div>
-          </div>
-        )}
-
-        {!result && !error && selectedFile && !isLoading && (
-          <div className="info-message">
-            💡 Ready to analyze! Click "Detect Deepfake" to process the audio.
           </div>
         )}
       </div>

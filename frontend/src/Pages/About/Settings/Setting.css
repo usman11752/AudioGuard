@@ -2,8 +2,8 @@
   width: 100%;
   min-height: 100vh;
   padding: 2.5rem;
-  background: radial-gradient(circle at top left, #7dd3fc 0%, #0f766e 45%, #052f2d 100%);
-  color: #f3f4f6;
+  background: #f8fafc;
+  color: var(--dark);
 }
 
 .settings-header {
@@ -73,12 +73,11 @@
 }
 
 .settings-section {
-  background: rgba(15, 23, 42, 0.92);
-  border: 1px solid rgba(99, 102, 241, 0.18);
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.05);
   border-radius: 24px;
   padding: 2rem;
-  box-shadow: 0 22px 60px rgba(15, 23, 42, 0.35);
-  backdrop-filter: blur(18px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
 }
 
 .settings-section:hover {
@@ -95,13 +94,13 @@
 }
 
 .section-icon {
-  color: #5eead4;
+  color: var(--primary);
   font-size: 1.6rem;
 }
 
 .section-header h2 {
   margin: 0;
-  color: #e2e8f0;
+  color: var(--dark);
   font-size: 1.4rem;
   font-weight: 700;
 }
@@ -126,13 +125,13 @@
 
 .setting-info h3 {
   margin: 0 0 0.45rem 0;
-  color: #f8fafc;
+  color: var(--dark);
   font-size: 1.05rem;
 }
 
 .setting-info p {
   margin: 0;
-  color: #cbd5e1;
+  color: var(--gray);
   font-size: 0.95rem;
   line-height: 1.5;
 }
@@ -173,7 +172,7 @@
 }
 
 input:checked + .toggle-slider {
-  background-color: #14b8a6;
+  background-color: var(--primary);
 }
 
 input:checked + .toggle-slider:before {
@@ -311,8 +310,8 @@ input:checked + .toggle-slider:before {
   padding: 1rem 2.5rem;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  background: linear-gradient(135deg, #2dd4bf 0%, #0f766e 100%);
-  color: white;
+  background: var(--ss-gold);
+  color: #002d2d;
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
@@ -385,6 +384,150 @@ input:checked + .toggle-slider:before {
 
   .threshold-labels {
     font-size: 0.8rem;
+  }
+}
+
+/* Profile Section Styles */
+.profile-edit-area {
+  display: flex;
+  gap: 3rem;
+  align-items: center;
+}
+
+.profile-pic-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.profile-pic-wrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.profile-pic-wrapper img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--primary);
+  box-shadow: 0 8px 24px rgba(13, 92, 92, 0.2);
+}
+
+.change-pic-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: var(--ss-gold);
+  color: #002d2d;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: all 0.2s ease;
+}
+
+.change-pic-btn:hover {
+  transform: scale(1.1);
+  background: #ffca28;
+}
+
+.status-badge {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.profile-form-grid {
+  flex: 1;
+  display: grid;
+  gap: 1.5rem;
+}
+
+/* Security Section Styles */
+.security-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.security-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.input-group label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--gray);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.input-group input {
+  padding: 0.85rem 1.2rem;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  color: var(--dark);
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 4px rgba(13, 92, 92, 0.15);
+}
+
+.update-pwd-btn {
+  align-self: flex-start;
+  padding: 0.85rem 2rem;
+  background: white;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.update-pwd-btn:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .profile-edit-area {
+    flex-direction: column;
+    text-align: center;
+  }
+  .security-row {
+    grid-template-columns: 1fr;
+  }
+  .update-pwd-btn {
+    width: 100%;
   }
 }
 
