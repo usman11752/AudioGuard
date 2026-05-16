@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  color: var(--dark);
+  overflow-x: hidden;
+}
+
+body.settings-dark-mode {
+  background: radial-gradient(circle at top left, #041f1a 0%, #021613 35%, #030a08 100%);
+  color: #f8fafc;
+}
+
+body.settings-dark-mode .settings-page {
+  background: radial-gradient(circle at top left, #064c44 0%, #032f2b 40%, #020b08 100%);
+  color: #e2e8f0;
+}
+
+body.settings-dark-mode .settings-section {
+  background: rgba(4, 13, 12, 0.96);
+  border-color: rgba(34, 197, 94, 0.22);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5);
+}
+
+body.settings-dark-mode .setting-info h3,
+body.settings-dark-mode .section-header h2,
+body.settings-dark-mode .settings-header p,
+body.settings-dark-mode .threshold-labels,
+body.settings-dark-mode .language-select,
+body.settings-dark-mode .warning-text {
+  color: #cbd5e1;
+}
+
+body.settings-dark-mode .language-select {
+  background: rgba(6, 11, 12, 0.96);
+  border-color: rgba(34, 197, 94, 0.28);
+}
+
+body.settings-dark-mode .save-btn,
+body.settings-dark-mode .restore-btn {
+  background: linear-gradient(135deg, #2dd4bf 0%, #0f766e 100%);
+}
+
+body.settings-dark-mode .danger-btn {
+  background: linear-gradient(135deg, #f43f5e 0%, #fb7185 100%);
+}
+
+::-webkit-scrollbar-track {
+  background: #111827;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #10b981;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #22c55e;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.5s ease-out;
+}

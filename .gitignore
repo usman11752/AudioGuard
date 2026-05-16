@@ -1,0 +1,20 @@
+# Node modules
+/frontend/node_modules
+/node_modules
+
+# Build output
+/frontend/build
+
+# Python caches
+/backend/__pycache__
+/**/*.py[cod]
+
+# Temp uploads
+/backend/temp_uploads
+
+# Environment files
+*.env
+
+# OS files
+.DS_Store
+Thumbs.db
