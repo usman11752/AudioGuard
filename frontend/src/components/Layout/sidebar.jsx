@@ -18,7 +18,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     { path: '/dashboard', icon: <FaTachometerAlt />, name: 'Dashboard', description: 'Overview & Stats' },
     { path: '/live',      icon: <FaMicrophone />,    name: 'Live Analysis', description: 'Real-time detection' },
     { path: '/history',   icon: <FaHistory />,       name: 'History', description: 'Past detections' },
-    { path: '/about',     icon: <FaInfoCircle />,    name: 'About', description: 'System info' },
+    { path: '/settings',  icon: <FaCog />,           name: 'Settings', description: 'App preferences' },
   ];
 
   return (

@@ -5,8 +5,7 @@ import LandingPage from './Pages/Landing/LandingPage';
 import Dashboard from './Pages/Dashboard/Dashboard';
 import LiveAnalysis from './Pages/LiveAnalysis/LiveAnalysis';
 import History from './Pages/History/History';
-import About from './Pages/About/About';
-import Settings from './Pages/About/Settings/Setting';
+import Settings from './Pages/Settings/Setting';
 import Login from './Pages/Auth/Login';
 import Signup from './Pages/Auth/Signup';
 import './App.css';
@@ -43,7 +42,6 @@ function App() {
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="live"      element={<LiveAnalysis />} />
               <Route path="history"   element={<History />} />
-              <Route path="about"     element={<About />} />
               <Route path="settings"  element={<Settings />} />
             </Routes>
           </Layout>
