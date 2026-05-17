@@ -192,7 +192,8 @@ const LiveAnalysis = () => {
       // Check if the result looks valid
       if (response.data && typeof response.data.is_fake !== 'undefined') {
         setResult(response.data);
-        setIsModalOpen(true);
+        // Do not auto-open the popup; just show that the result is ready!
+        setIsModalOpen(false);
 
         // Save to history
         const historyItem = {
@@ -546,9 +547,6 @@ const LiveAnalysis = () => {
                 A dedicated microphone performs better than built-in ones.
               </li>
             </ul>
-            <div className="model-badge">
-              <span>Model v2.1 (Deep Neural Network)</span>
-            </div>
           </div>
         </div>
       </div>
