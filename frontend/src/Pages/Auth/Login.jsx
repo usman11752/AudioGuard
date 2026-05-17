@@ -274,7 +274,6 @@ const Login = () => {
           <div className="illustration-card-floating">
             <div className="card-floating-badge">Live Voice Analysis</div>
             <p className="card-floating-desc">Real-time deepfake detection using your microphone</p>
-            <div className="card-floating-model">Model v2.1 (Deep Neural Network)</div>
           </div>
         </div>
       </div>

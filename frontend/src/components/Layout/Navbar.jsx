@@ -96,7 +96,7 @@ const Navbar = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
   };
 
   // Dynamic Detections & Usage computations
-  const limit = plan === 'Pro Plan' ? 100 : 10;
+  const limit = plan === 'Pro Plan' ? 250 : 75;
   const remaining = Math.max(0, limit - historyCount);
   const usagePercentage = Math.min(100, Math.round((historyCount / limit) * 100));
 

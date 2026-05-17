@@ -1,273 +1,221 @@
-import React, { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { FaUserShield, FaCheckCircle, FaLock, FaMicrophone, FaChartBar, FaShieldAlt } from 'react-icons/fa';
 import './LandingPage.css';
 
-/* ── tiny helper to animate counter numbers ── */
-function useCountUp(target, duration = 1800) {
-  const ref = useRef(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    let start = 0;
-    const step = target / (duration / 16);
-    const id = setInterval(() => {
-      start = Math.min(start + step, target);
-      el.textContent = Number.isInteger(target)
-        ? Math.floor(start).toLocaleString()
-        : start.toFixed(1);
-      if (start >= target) clearInterval(id);
-    }, 16);
-    return () => clearInterval(id);
-  }, [target, duration]);
-  return ref;
-}
-
-/* ── wave bars for hero decoration ── */
-const WAVE_HEIGHTS = [18, 32, 48, 28, 55, 22, 40, 60, 35, 50, 25, 45, 30, 58, 20, 42, 52, 27, 38, 62];
-
 const LandingPage = () => {
-  const countRef1 = useCountUp(98.7);
-  const countRef2 = useCountUp(50000);
-  const countRef3 = useCountUp(10);
-  const countRef4 = useCountUp(99);
+  const navigate = useNavigate();
+
+  const handleScroll = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <div className="landing-page">
-      {/* ── NAVBAR ── */}
+      {/* ─── NAVBAR (Exactly like the User's Mockup) ─── */}
       <nav className="landing-nav">
-        <Link to="/" className="landing-nav-logo">
-          <div className="nav-logo-icon">🎙️</div>
-          <div className="nav-brand">
-            <span className="nav-brand-name">AudioGuard</span>
-            <span className="nav-brand-sub">AI Deepfake Detection</span>
-          </div>
-        </Link>
+        <div className="landing-nav-container">
+          <Link to="/" className="landing-nav-logo">
+            <FaUserShield className="nav-logo-icon-svg" />
+            <div className="nav-brand">
+              <span className="nav-brand-name">AudioGuard</span>
+              <span className="nav-brand-sub">AI DEEPFAKE DETECTION</span>
+            </div>
+          </Link>
 
-        <div className="landing-nav-links">
-          <Link to="/login"  className="nav-link-ghost">Login</Link>
-          <Link to="/signup" className="nav-link-primary">Get Started</Link>
+          <div className="landing-nav-center">
+            <button onClick={() => handleScroll('features')} className="nav-link-text">Features</button>
+            <button onClick={() => handleScroll('how-it-works')} className="nav-link-text">How It Works</button>
+            <button onClick={() => handleScroll('about')} className="nav-link-text">About</button>
+          </div>
+
+          <div className="landing-nav-right">
+            <Link to="/login" className="nav-signin-link">Sign In</Link>
+            <Link to="/signup" className="nav-getstarted-btn">Get Started</Link>
+          </div>
         </div>
       </nav>
 
-      {/* ── HERO ── */}
-      <section className="hero-section">
-        <div className="hero-glow" />
-
-        {/* floating icon */}
-        <div className="hero-icon-wrap">🎙️</div>
-
-        {/* badge pill */}
-        <div className="hero-badge">
-          <span className="badge-dot" />
-          🏆 AI-Powered · Real-Time · 98.7% Accuracy
-        </div>
-
-        {/* headline exactly like SS */}
-        <h1 className="hero-title">
-          <span className="title-white">Protecting Every</span>
-          <span className="title-gradient">Voice</span>
-        </h1>
-
-        {/* description exactly like SS */}
-        <p className="hero-desc">
-          Empowering security, shielding authenticity. AudioGuard is committed
-          to providing world-class deepfake detection with modern AI facilities
-          and expert algorithms.
-        </p>
-
-        {/* CTA buttons */}
-        <div className="hero-cta">
-          <Link to="/signup" className="btn-primary-lg">
-            🚀 Start Analysing Free
-          </Link>
-          <Link to="/live" className="btn-outline-lg">
-            🎤 Try Live Detection
-          </Link>
-        </div>
-
-        {/* decorative wave bars */}
-        <div className="hero-waves">
-          {WAVE_HEIGHTS.concat(WAVE_HEIGHTS).map((h, i) => (
-            <span key={i} style={{ height: `${h}px`, animationDelay: `${(i * 0.06).toFixed(2)}s` }} />
-          ))}
-        </div>
-      </section>
-
-      {/* ── STATS STRIP ── */}
-      <div className="stats-strip">
-        <div className="stats-strip-inner">
-          <div className="stat-strip-item">
-            <div className="stat-strip-number">
-              <span ref={countRef1}>0.0</span>%
+      {/* ─── HERO SECTION (Split-Screen Laptop Layout) ─── */}
+      <header className="hero-container">
+        <div className="hero-split-grid">
+          {/* Left Column: Headline & CTA */}
+          <div className="hero-text-content">
+            <div className="hero-badge-pill">
+              <span className="badge-dot" />
+              AI-Powered Deepfake Voice Shield
             </div>
-            <div className="stat-strip-label">Detection Accuracy</div>
+            <h1 className="hero-main-title">
+              Protecting Every <br />
+              <span className="gradient-highlight">Voice</span>
+            </h1>
+            <p className="hero-subtext">
+              Empowering security, shielding authenticity. AudioGuard is committed
+              to providing world-class deepfake detection with modern AI facilities
+              and expert algorithms. Verify speech signals in seconds.
+            </p>
+            <div className="hero-cta-row">
+              <Link to="/signup" className="hero-primary-cta">Get Started Free →</Link>
+              <button onClick={() => handleScroll('how-it-works')} className="hero-secondary-cta">How It Works</button>
+            </div>
           </div>
-          <div className="stat-strip-item">
-            <div className="stat-strip-number">
-              <span ref={countRef2}>0</span>+
+
+          {/* Right Column: Breathtaking Illustration Scene */}
+          <div className="hero-illustration-scene">
+            <div className="visual-glow-background" />
+            
+            {/* The beautiful fallback SVG shield microphone matching the auth screen */}
+            <div className="microphone-3d-scene">
+              <img 
+                src="/auth_microphone.png" 
+                alt="AudioGuard Protection Engine" 
+                className="microphone-3d-asset"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  document.getElementById('hero-fallback-svg').style.display = 'block';
+                }}
+              />
+              
+              <svg id="hero-fallback-svg" style={{ display: 'none', width: '100%', maxHeight: '340px' }} viewBox="0 0 200 200">
+                <defs>
+                  <radialGradient id="heroNeonGlow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#10b981" stopOpacity="0.35" />
+                    <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
+                  </radialGradient>
+                </defs>
+                <circle cx="100" cy="95" r="65" fill="url(#heroNeonGlow)" />
+                {/* Stand */}
+                <rect x="96" y="125" width="8" height="40" rx="4" fill="#0f766e" />
+                <rect x="75" y="165" width="50" height="8" rx="4" fill="#0d5c5c" />
+                {/* Body */}
+                <rect x="80" y="55" width="40" height="70" rx="20" fill="#115e59" stroke="#10b981" strokeWidth="3" />
+                <line x1="80" y1="75" x2="120" y2="75" stroke="#10b981" strokeWidth="1" strokeDasharray="2,2" />
+                <line x1="80" y1="95" x2="120" y2="95" stroke="#10b981" strokeWidth="1" strokeDasharray="2,2" />
+                {/* Shield Overlay */}
+                <path d="M 100 25 L 140 45 L 140 85 C 140 120 100 145 100 145 C 100 145 60 120 60 85 L 60 45 Z" fill="rgba(16, 185, 129, 0.15)" stroke="#10b981" strokeWidth="4.5" filter="drop-shadow(0 0 12px rgba(16, 185, 129, 0.5))" />
+                <circle cx="100" cy="85" r="14" fill="#0f766e" />
+                <path d="M 96 82 L 104 82 L 104 88 L 96 88 Z" fill="#10b981" />
+              </svg>
             </div>
-            <div className="stat-strip-label">Audio Files Analysed</div>
-          </div>
-          <div className="stat-strip-item">
-            <div className="stat-strip-number">
-              &lt;<span ref={countRef3}>0</span>ms
+
+            {/* Interactive floating descriptive panel */}
+            <div className="hero-floating-card">
+              <div className="floating-card-badge">Engine Status: Active</div>
+              <p className="floating-card-title">Deepfake Analysis Active</p>
+              <span className="floating-card-subtitle">Real-time signal analysis & classification</span>
             </div>
-            <div className="stat-strip-label">Real-Time Latency</div>
-          </div>
-          <div className="stat-strip-item">
-            <div className="stat-strip-number">
-              <span ref={countRef4}>0</span>%
-            </div>
-            <div className="stat-strip-label">System Uptime</div>
           </div>
         </div>
-      </div>
+      </header>
 
-      {/* ── FEATURES ── */}
-      <section className="features-section">
-        <p className="section-label">Why AudioGuard?</p>
-        <h2 className="section-title">Cutting-Edge Protection Features</h2>
-        <p className="section-subtitle">
-          Every feature is designed to give you maximum confidence in audio authenticity
-          — from a single file to enterprise-scale live streams.
-        </p>
+      {/* ─── FEATURES SECTION ─── */}
+      <section id="features" className="landing-section features-landing">
+        <div className="section-header-centered">
+          <span className="section-mini-tag">Key Capabilities</span>
+          <h2>Cutting-Edge Protection</h2>
+          <p>Every feature is designed to give you maximum confidence in audio authenticity.</p>
+        </div>
 
-        <div className="features-grid">
-          <div className="feature-card">
-            <div className="feature-icon indigo">🧠</div>
-            <h3 className="feature-title">Deep-Learning Model</h3>
-            <p className="feature-desc">
-              Powered by a state-of-the-art transformer trained on millions of real and
-              synthetic voice samples — detecting even the latest voice-cloning tools.
-            </p>
+        <div className="capabilities-grid">
+          <div className="capability-card">
+            <div className="capability-icon-wrap bg-green">
+              <FaShieldAlt />
+            </div>
+            <h3>Deep Learning Analysis</h3>
+            <p>Powered by neural networks trained on millions of real and synthetic voice samples to detect cloned speech.</p>
           </div>
 
-          <div className="feature-card">
-            <div className="feature-icon green">⚡</div>
-            <h3 className="feature-title">Real-Time Live Analysis</h3>
-            <p className="feature-desc">
-              Stream audio directly from your microphone and receive instant deepfake
-              probability scores frame-by-frame with sub-10 ms latency.
-            </p>
+          <div className="capability-card">
+            <div className="capability-icon-wrap bg-teal">
+              <FaMicrophone />
+            </div>
+            <h3>Real-Time Live Analysis</h3>
+            <p>Stream directly from your microphone and receive instant deepfake probability scores frame-by-frame.</p>
           </div>
 
-          <div className="feature-card">
-            <div className="feature-icon purple">📂</div>
-            <h3 className="feature-title">Batch File Upload</h3>
-            <p className="feature-desc">
-              Analyse MP3, WAV, FLAC, M4A and more. Drag-and-drop multiple files for
-              bulk processing with a detailed per-file confidence report.
-            </p>
-          </div>
-
-          <div className="feature-card">
-            <div className="feature-icon amber">📊</div>
-            <h3 className="feature-title">Rich Analytics Dashboard</h3>
-            <p className="feature-desc">
-              Track detection history, confidence trends, and threat statistics with
-              beautiful interactive charts right inside the app.
-            </p>
-          </div>
-
-          <div className="feature-card">
-            <div className="feature-icon red">🛡️</div>
-            <h3 className="feature-title">Threat Confidence Score</h3>
-            <p className="feature-desc">
-              Every result comes with a 0–100% confidence score and colour-coded risk
-              level — Real, Suspicious, or Fake — so you can act fast.
-            </p>
-          </div>
-
-          <div className="feature-card">
-            <div className="feature-icon blue">🗂️</div>
-            <h3 className="feature-title">Full Detection History</h3>
-            <p className="feature-desc">
-              Every scan is logged with timestamps, file details, and results.
-              Search, filter, and export your detection history at any time.
-            </p>
+          <div className="capability-card">
+            <div className="capability-icon-wrap bg-indigo">
+              <FaChartBar />
+            </div>
+            <h3>Analytics Dashboard</h3>
+            <p>Track history, confidence scores, and past signals on an interactive, clean interface.</p>
           </div>
         </div>
       </section>
 
-      {/* ── HOW IT WORKS ── */}
-      <section className="how-section">
-        <p className="section-label">Simple Process</p>
-        <h2 className="section-title">How AudioGuard Works</h2>
-        <p className="section-subtitle">
-          Three simple steps to verify any audio in seconds.
-        </p>
+      {/* ─── HOW IT WORKS SECTION ─── */}
+      <section id="how-it-works" className="landing-section how-landing">
+        <div className="section-header-centered">
+          <span className="section-mini-tag">Simple Process</span>
+          <h2>How AudioGuard Works</h2>
+          <p>Verify speech signals in three simple steps.</p>
+        </div>
 
-        <div className="steps-container">
-          <div className="step-item">
-            <div className="step-number">01</div>
-            <div className="step-content">
-              <h3>Upload or Stream Audio</h3>
-              <p>
-                Drag and drop an audio file (MP3, WAV, FLAC, M4A) or click
-                <em> Live Analysis</em> to stream directly from your microphone.
-                AudioGuard accepts any common format up to 500 MB.
-              </p>
+        <div className="how-steps-timeline">
+          <div className="timeline-step">
+            <div className="timeline-badge">1</div>
+            <div className="timeline-body">
+              <h3>Upload or Stream Speech</h3>
+              <p>Drag and drop a speech recording or stream directly using the live microphone analyzer.</p>
             </div>
           </div>
 
-          <div className="step-item">
-            <div className="step-number">02</div>
-            <div className="step-content">
-              <h3>AI Model Analyses the Signal</h3>
-              <p>
-                Our transformer-based model extracts spectral features, prosodic
-                patterns, and micro-artefacts left by voice-synthesis tools —
-                comparing them against a baseline of real human speech.
-              </p>
+          <div className="timeline-step">
+            <div className="timeline-badge">2</div>
+            <div className="timeline-body">
+              <h3>AI Feature Extraction</h3>
+              <p>The system extracts spectral prosody and vocal artifacts left behind by speech synthesis algorithms.</p>
             </div>
           </div>
 
-          <div className="step-item">
-            <div className="step-number">03</div>
-            <div className="step-content">
-              <h3>Get an Instant Verdict</h3>
-              <p>
-                Within milliseconds you receive a colour-coded result —{' '}
-                <strong style={{ color: '#10b981' }}>Real</strong>,{' '}
-                <strong style={{ color: '#f59e0b' }}>Suspicious</strong>, or{' '}
-                <strong style={{ color: '#ef4444' }}>Fake</strong> — with a
-                full confidence score and waveform visualisation.
-              </p>
+          <div className="timeline-step">
+            <div className="timeline-badge">3</div>
+            <div className="timeline-body">
+              <h3>Instant Verdict</h3>
+              <p>Receive a clear percentage confidence indicator and validation verdict immediately.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── CTA ── */}
-      <section className="cta-section">
-        <div className="cta-glow" />
-        <h2>Ready to Guard Against Audio Fakes?</h2>
-        <p>
-          Join thousands of users protecting themselves from voice cloning and
-          synthetic audio fraud. Free to start — no credit card required.
-        </p>
-        <div className="cta-buttons">
-          <Link to="/signup" className="btn-primary-lg">
-            🚀 Create Free Account
-          </Link>
+      {/* ─── ABOUT / CTA SECTION ─── */}
+      <section id="about" className="landing-section cta-landing">
+        <div className="cta-box-wrapper">
+          <div className="cta-mesh-glow" />
+          <h2>Protect Your Audio Integrity Today</h2>
+          <p>Join secure systems safeguarding vocal communication from synthesis fraud and identity cloning.</p>
+          <Link to="/signup" className="cta-final-button">Get Started Now</Link>
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
-      <footer className="landing-footer">
-        <div className="footer-inner">
-          <Link to="/" className="footer-brand">
-            <span style={{ fontSize: '1.3rem' }}>🎙️</span>
-            <span className="footer-brand-name">AudioGuard</span>
-          </Link>
-          <span className="footer-copy">
-            © {new Date().getFullYear()} AudioGuard. All rights reserved.
-          </span>
-          <div className="footer-links">
-            <Link to="/about">About</Link>
+      {/* ─── FOOTER ─── */}
+      <footer className="landing-clean-footer">
+        <div className="footer-container">
+          <div className="footer-brand-column">
+            <div className="footer-brand-logo">
+              <FaUserShield className="footer-brand-icon" />
+              <span>AudioGuard</span>
+            </div>
+            <p className="footer-description-tag">World-class AI voice-cloning detection shield.</p>
+          </div>
+
+          <div className="footer-nav-column">
+            <h4>Platform</h4>
+            <Link to="/login">Sign In</Link>
+            <Link to="/signup">Get Started</Link>
+          </div>
+
+          <div className="footer-nav-column">
+            <h4>System</h4>
             <Link to="/live">Live Analysis</Link>
             <Link to="/history">History</Link>
           </div>
+        </div>
+        <div className="footer-bottom-bar">
+          <p>© {new Date().getFullYear()} AudioGuard. All rights reserved.</p>
         </div>
       </footer>
     </div>
