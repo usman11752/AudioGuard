@@ -14,11 +14,20 @@ const LiveAnalysis = () => {
   const [recordingDuration, setRecordingDuration] = useState(0);
   const [permissionDenied, setPermissionDenied] = useState(false);
   const [audioLevels, setAudioLevels] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const timerRef = useRef(null);
   const audioRef = useRef(null);
+  const resultsRef = useRef(null);
+
+  // Auto-scroll to results when they load
+  useEffect(() => {
+    if (result && resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [result]);
 
   useEffect(() => {
     checkMicrophonePermission();
@@ -183,6 +192,7 @@ const LiveAnalysis = () => {
       // Check if the result looks valid
       if (response.data && typeof response.data.is_fake !== 'undefined') {
         setResult(response.data);
+        setIsModalOpen(true);
 
         // Save to history
         const historyItem = {
@@ -445,7 +455,7 @@ const LiveAnalysis = () => {
                     {audioBlob && !isRecording && (
                       <div className="visualizer-placeholder">
                         <FaCheckCircle className="placeholder-icon success" />
-                        <p>Voice captured successfully</p>
+                        <p>{result ? "Analysis completed! Result is ready" : "Voice captured successfully"}</p>
                       </div>
                     )}
                   </div>
@@ -481,9 +491,15 @@ const LiveAnalysis = () => {
                           <FaRedo /> Retake
                         </button>
                       </div>
-                      <button onClick={analyzeAudio} className="btn-analyze-large">
-                        <FaChartLine /> Analyze with AI
-                      </button>
+                      {result ? (
+                        <button onClick={() => setIsModalOpen(true)} className="btn-view-result-large">
+                          <FaChartLine /> View Result
+                        </button>
+                      ) : (
+                        <button onClick={analyzeAudio} className="btn-analyze-large">
+                          <FaChartLine /> Analyze with AI
+                        </button>
+                      )}
                     </div>
                   )}
 
@@ -539,7 +555,7 @@ const LiveAnalysis = () => {
 
       {/* Full Width Results Section */}
       {result && (
-        <div className={`results-card-full ${result.is_fake ? 'fake' : 'real'} slide-up`}>
+        <div ref={resultsRef} className={`results-card-full ${result.is_fake ? 'fake' : 'real'} slide-up`}>
           <div className="results-main">
             <div className="result-indicator">
               <div className="result-symbol">
@@ -567,6 +583,67 @@ const LiveAnalysis = () => {
           <div className="result-footer-simple">
             <div className="footer-timestamp">
               Analyzed at {new Date().toLocaleTimeString()}
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Premium Result Modal */}
+      {isModalOpen && result && (
+        <div className="result-modal-overlay" onClick={() => setIsModalOpen(false)}>
+          <div className="result-modal-content slide-up" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-btn" onClick={() => setIsModalOpen(false)}>×</button>
+            
+            <div className={`modal-status-badge ${result.is_fake ? 'fake' : 'real'}`}>
+              {result.is_fake ? '🤖 AI FAKE DETECTED' : '🛡️ REAL HUMAN VOICE'}
+            </div>
+            
+            <div className="modal-body">
+              <div className="gauge-container">
+                <svg viewBox="0 0 100 100" className="gauge-svg">
+                  <circle className="gauge-track" cx="50" cy="50" r="40" />
+                  <circle 
+                    className="gauge-fill" 
+                    cx="50" 
+                    cy="50" 
+                    r="40" 
+                    style={{
+                      strokeDasharray: `${2 * Math.PI * 40}`,
+                      strokeDashoffset: `${2 * Math.PI * 40 * (1 - result.confidence)}`,
+                      stroke: result.is_fake ? '#ef4444' : '#10b981'
+                    }}
+                  />
+                  <text x="50" y="52" className="gauge-text">
+                    {(result.confidence * 100).toFixed(1)}%
+                  </text>
+                </svg>
+                <div className="gauge-label">Confidence Score</div>
+              </div>
+              
+              <div className="result-description-card">
+                <h3>Analysis Breakdown</h3>
+                <p className="verdict-msg">{result.message}</p>
+                <p className="detailed-explanation">
+                  {result.is_fake 
+                    ? "Our advanced neural network detected synthetic patterns, speech anomalies, and spectral artifacts characteristic of modern AI voice generators." 
+                    : "Our analysis confirmed authentic biological vocal markers, natural cord vibrations, and standard ambient resonance."
+                  }
+                </p>
+              </div>
+            </div>
+            
+            <div className="modal-actions-footer">
+              <button className="btn-modal-close" onClick={() => setIsModalOpen(false)}>
+                Done
+              </button>
+              <button 
+                className="btn-modal-retry" 
+                onClick={() => {
+                  setIsModalOpen(false);
+                  resetRecording();
+                }}
+              >
+                Analyze New Voice
+              </button>
             </div>
           </div>
         </div>

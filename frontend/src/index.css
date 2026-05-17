@@ -1,4 +1,4 @@
-﻿* {
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -33,4 +33,102 @@ button {
 
 body::selection {
   background: rgba(79, 70, 229, 0.32);
+}
+
+/* Universal Dark Mode Overrides */
+body.settings-dark-mode {
+  background: #090d16 !important;
+  color: #f8fafc !important;
+}
+
+/* Navbar Dark Theme */
+body.settings-dark-mode .navbar {
+  background: rgba(15, 23, 42, 0.95) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4) !important;
+}
+
+body.settings-dark-mode .logo-main {
+  color: #14b8a6 !important;
+}
+
+body.settings-dark-mode .search-bar input {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  color: white !important;
+}
+
+body.settings-dark-mode .theme-toggle {
+  color: #eab308 !important;
+}
+
+body.settings-dark-mode .notification-dropdown,
+body.settings-dark-mode .user-dropdown-menu {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #f8fafc !important;
+}
+
+body.settings-dark-mode .dropdown-user-name,
+body.settings-dark-mode .usage-label {
+  color: white !important;
+}
+
+body.settings-dark-mode .dropdown-item {
+  color: #cbd5e1 !important;
+}
+
+body.settings-dark-mode .dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #14b8a6 !important;
+}
+
+/* Sidebar Dark Theme overrides */
+body.settings-dark-mode .sidebar {
+  background: linear-gradient(180deg, #111827 0%, #030712 100%) !important;
+}
+
+/* Dashboard & Cards Dark Theme */
+body.settings-dark-mode .dashboard-card,
+body.settings-dark-mode .settings-section,
+body.settings-dark-mode .recording-card,
+body.settings-dark-mode .tips-card-modern,
+body.settings-dark-mode .history-card,
+body.settings-dark-mode .about-card,
+body.settings-dark-mode .results-card-full,
+body.settings-dark-mode .upload-card {
+  background: #0f172a !important;
+  border: 1px solid #1e293b !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25) !important;
+  color: #f8fafc !important;
+}
+
+body.settings-dark-mode h1,
+body.settings-dark-mode h2,
+body.settings-dark-mode h3,
+body.settings-dark-mode h4,
+body.settings-dark-mode .section-header h2,
+body.settings-dark-mode .setting-info h3,
+body.settings-dark-mode .stats-card h3 {
+  color: white !important;
+}
+
+body.settings-dark-mode p,
+body.settings-dark-mode span,
+body.settings-dark-mode .setting-info p,
+body.settings-dark-mode .text-muted,
+body.settings-dark-mode .upload-text,
+body.settings-dark-mode .upload-hint {
+  color: #94a3b8 !important;
+}
+
+body.settings-dark-mode .input-group input {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  color: white !important;
+}
+
+body.settings-dark-mode .input-group input:focus {
+  border-color: #14b8a6 !important;
+  box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.15) !important;
 }

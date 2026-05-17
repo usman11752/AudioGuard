@@ -395,3 +395,38 @@
   font-weight: 600;
   font-size: 0.9rem;
 }
+
+/* Plan Gold Theme Styling & Upgrade Button */
+.plan-badge.pro-gold {
+  background: rgba(234, 179, 8, 0.15) !important;
+  color: #eab308 !important;
+  border: 1px solid rgba(234, 179, 8, 0.3) !important;
+}
+
+.upgrade-action-btn {
+  margin-top: 0.8rem;
+  background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(234, 179, 8, 0.2);
+}
+
+.upgrade-action-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(234, 179, 8, 0.35);
+}
+
+.notification-empty {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--gray);
+  font-size: 0.85rem;
+}
