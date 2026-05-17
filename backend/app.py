@@ -10,14 +10,19 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# Configure CORS origins (allow local React and deployed Vercel frontend)
-allowed_origins = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    os.getenv('FRONTEND_URL', '')
-]
-allowed_origins = [origin for origin in allowed_origins if origin]
-CORS(app, origins=allowed_origins)
+# Configure CORS origins
+frontend_url = os.getenv('FRONTEND_URL')
+if frontend_url:
+    allowed_origins = [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        frontend_url
+    ]
+    allowed_origins = [origin for origin in allowed_origins if origin]
+    CORS(app, origins=allowed_origins)
+else:
+    # Fallback to allow all origins if FRONTEND_URL is not configured yet
+    CORS(app)
 
 
 # Configuration
