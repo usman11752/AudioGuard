@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaUser, FaEnvelope, FaLock, FaUserShield } from 'react-icons/fa';
 import axios from 'axios';
 import './Auth.css';
+import { API_URL } from '../../config';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -31,7 +32,7 @@ const Signup = () => {
     setError('');
 
     try {
-      const response = await axios.post('http://127.0.0.1:5000/register', {
+      const response = await axios.post(`${API_URL}/register`, {
         name: formData.name,
         email: formData.email,
         password: formData.password

@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FaEnvelope, FaLock, FaUserShield } from 'react-icons/fa';
 import axios from 'axios';
 import './Auth.css';
+import { API_URL } from '../../config';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -19,7 +20,7 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await axios.post('http://127.0.0.1:5000/login', { email, password });
+      const response = await axios.post(`${API_URL}/login`, { email, password });
 
       if (response.data.success) {
         // Store user in localStorage

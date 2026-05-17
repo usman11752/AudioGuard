@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import './AudioUploader.css';
+import { API_URL } from './config';
 
 function AudioUploader() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -51,7 +52,7 @@ function AudioUploader() {
     formData.append('type', 'upload');
 
     try {
-      const response = await axios.post('http://127.0.0.1:5000/predict', formData, {
+      const response = await axios.post(`${API_URL}/predict`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         timeout: 60000,
       });
@@ -80,7 +81,7 @@ function AudioUploader() {
       } else if (err.response) {
         setError(err.response.data?.error || 'Server error occurred');
       } else if (err.request) {
-        setError('Cannot connect to backend server. Make sure it\'s running on http://127.0.0.1:5000');
+        setError(`Cannot connect to backend server. Make sure it's running on ${API_URL}`);
       } else {
         setError('Failed to get a prediction. Please try again.');
       }

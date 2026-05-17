@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { FaMicrophone, FaStop, FaPlay, FaDownload, FaRedo, FaChartLine, FaLightbulb, FaCheckCircle, FaExclamationTriangle } from 'react-icons/fa';
 import './LiveAnalysis.css';
+import { API_URL } from '../../config';
 
 const LiveAnalysis = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -172,7 +173,7 @@ const LiveAnalysis = () => {
 
     try {
       console.log('Sending to backend...');
-      const response = await axios.post('http://127.0.0.1:5000/predict', formData, {
+      const response = await axios.post(`${API_URL}/predict`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         timeout: 30000,
       });
@@ -205,11 +206,11 @@ const LiveAnalysis = () => {
       console.error('Analysis error details:', err);
 
       if (err.code === 'ECONNABORTED') {
-        setError('Request timed out. Make sure backend server is running on http://127.0.0.1:5000');
+        setError(`Request timed out. Make sure backend server is running on ${API_URL}`);
       } else if (err.response) {
         setError(`Server error: ${err.response.data?.error || 'Unknown server error'}`);
       } else if (err.request) {
-        setError('Cannot connect to backend. Please check if backend is running on http://127.0.0.1:5000');
+        setError(`Cannot connect to backend. Please check if backend is running on ${API_URL}`);
       } else {
         setError(`Failed to analyze: ${err.message}`);
       }
