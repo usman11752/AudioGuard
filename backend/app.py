@@ -9,7 +9,16 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+
+# Configure CORS origins (allow local React and deployed Vercel frontend)
+allowed_origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    os.getenv('FRONTEND_URL', '')
+]
+allowed_origins = [origin for origin in allowed_origins if origin]
+CORS(app, origins=allowed_origins)
+
 
 # Configuration
 UPLOAD_FOLDER = 'temp_uploads'
@@ -102,4 +111,6 @@ def health():
 
 if __name__ == '__main__':
     # Run the Flask app
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    port = int(os.getenv('PORT', 5000))
+    debug = os.getenv('DEBUG', 'False').lower() == 'true'
+    app.run(host='0.0.0.0', port=port, debug=debug)
