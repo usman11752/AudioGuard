@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-uri = os.getenv('MONGODB_URI')
+uri = os.getenv('MONGODB_URI') or os.getenv('MONGODB_URL')
 print(f"Connecting to: {uri}")
 try:
     client = MongoClient(uri)

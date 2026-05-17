@@ -8,7 +8,7 @@ load_dotenv()
 
 class DatabaseService:
     def __init__(self):
-        self.uri = os.getenv('MONGODB_URI')
+        self.uri = os.getenv('MONGODB_URI') or os.getenv('MONGODB_URL')
         self.client = None
         self.db = None
         self.collection = None
