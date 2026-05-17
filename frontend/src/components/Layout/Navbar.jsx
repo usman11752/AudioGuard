@@ -1,26 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaBars, FaBell, FaUserCircle, FaMoon, FaSun, FaSearch, FaSignOutAlt, FaCog, FaCrown, FaCheckCircle } from 'react-icons/fa';
+import { FaBars, FaUserCircle, FaMoon, FaSun, FaSearch, FaSignOutAlt, FaCog, FaCrown, FaCheckCircle } from 'react-icons/fa';
 import './Navbar.css';
 
 const Navbar = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
   const navigate = useNavigate();
-  const [showNotifications, setShowNotifications] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const notificationRef = useRef(null);
   const dropdownRef = useRef(null);
 
   // Load user details dynamically from localStorage
   const [user, setUser] = useState(null);
   const [plan, setPlan] = useState('Free Plan');
   const [historyCount, setHistoryCount] = useState(0);
-
-  const [notificationsList, setNotificationsList] = useState([
-    { id: 1, message: 'Welcome to AudioGuard!', time: 'Just now', type: 'success' },
-    { id: 2, message: 'Model loaded successfully', time: '1 hour ago', type: 'info' },
-    { id: 3, message: 'All systems operational', time: '2 hours ago', type: 'success' },
-  ]);
 
   useEffect(() => {
     const loadUserData = () => {
@@ -59,9 +51,6 @@ const Navbar = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
   // Sync click outside to close dropdowns
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (notificationRef.current && !notificationRef.current.contains(event.target)) {
-        setShowNotifications(false);
-      }
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setShowDropdown(false);
       }
@@ -85,14 +74,6 @@ const Navbar = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
     alert(`Plan updated! You are now using the ${nextPlan}.`);
     // Dispatch event so other components refresh if needed
     window.dispatchEvent(new Event('storage'));
-  };
-
-  const markAllAsRead = () => {
-    setNotificationsList([]);
-  };
-
-  const removeNotification = (id) => {
-    setNotificationsList(prev => prev.filter(item => item.id !== id));
   };
 
   // Dynamic Detections & Usage computations
@@ -124,41 +105,7 @@ const Navbar = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
           <button className="theme-toggle" onClick={() => setDarkMode(!darkMode)} title="Toggle Dark/Light Mode">
             {darkMode ? <FaSun /> : <FaMoon />}
           </button>
-          
-          <div className="notifications" ref={notificationRef}>
-            <button className="notification-btn" onClick={() => setShowNotifications(!showNotifications)}>
-              <FaBell />
-              {notificationsList.length > 0 && (
-                <span className="notification-badge">{notificationsList.length}</span>
-              )}
-            </button>
-            
-            {showNotifications && (
-              <div className="notification-dropdown">
-                <div className="notification-header">
-                  <h3>Notifications</h3>
-                  {notificationsList.length > 0 && (
-                    <button onClick={markAllAsRead}>Mark all as read</button>
-                  )}
-                </div>
-                {notificationsList.length === 0 ? (
-                  <div className="notification-empty">No new notifications</div>
-                ) : (
-                  notificationsList.map(notif => (
-                    <div 
-                      key={notif.id} 
-                      className={`notification-item ${notif.type}`}
-                      onClick={() => removeNotification(notif.id)}
-                      title="Click to clear"
-                    >
-                      <p>{notif.message}</p>
-                      <span>{notif.time}</span>
-                    </div>
-                  ))
-                )}
-              </div>
-            )}
-          </div>
+
 
           <div className="user-dropdown-container" ref={dropdownRef}>
             <button className="user-profile" onClick={() => setShowDropdown(!showDropdown)}>

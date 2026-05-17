@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { FaCog, FaBell, FaMoon, FaTrash, FaCheckCircle, FaSyncAlt, FaUser, FaLock, FaCamera, FaEnvelope, FaExclamationTriangle } from 'react-icons/fa';
+import { FaCog, FaMoon, FaTrash, FaCheckCircle, FaSyncAlt, FaUser, FaLock, FaCamera, FaEnvelope, FaExclamationTriangle } from 'react-icons/fa';
 import './Setting.css';
 
 const defaultSettings = {
   darkMode: false,
-  notifications: true,
-  autoSave: true,
-  confidenceThreshold: 70,
   language: 'en'
 };
 
@@ -76,22 +73,9 @@ const Settings = () => {
       [key]: newValue
     }));
 
-    if (key === 'notifications') {
-      showToast(`Notifications ${newValue ? 'enabled' : 'disabled'}`);
-    }
-    if (key === 'autoSave') {
-      showToast(`Auto-save ${newValue ? 'enabled' : 'disabled'}`);
-    }
     if (key === 'darkMode') {
       showToast(`${newValue ? 'Dark mode enabled' : 'Dark mode disabled'}`);
     }
-  };
-
-  const handleSliderChange = (e) => {
-    setSettings((prev) => ({
-      ...prev,
-      confidenceThreshold: parseInt(e.target.value, 10)
-    }));
   };
 
   const handleLanguageChange = (e) => {
@@ -115,7 +99,6 @@ const Settings = () => {
         const parsed = JSON.parse(storedUser);
         const updated = { ...parsed, name: profileName };
         localStorage.setItem('user', JSON.stringify(updated));
-        // Update avatar URL as well
         setAvatarUrl(`https://ui-avatars.com/api/?name=${encodeURIComponent(profileName)}&background=0d5c5c&color=fff&size=128`);
         window.dispatchEvent(new Event('storage'));
         showToast('Profile updated successfully!');
@@ -123,7 +106,6 @@ const Settings = () => {
         showToast('Failed to update profile details', 'error');
       }
     } else {
-      // Offline simulation fallback
       localStorage.setItem('user', JSON.stringify({ name: profileName, email: profileEmail }));
       window.dispatchEvent(new Event('storage'));
       showToast('Profile updated successfully!');
@@ -147,7 +129,6 @@ const Settings = () => {
       return;
     }
 
-    // Reset fields
     setPasswords({ current: '', newPass: '', confirm: '' });
     showToast('Password updated successfully!');
   };
@@ -175,10 +156,7 @@ const Settings = () => {
     <div className="settings-page">
       <div className="settings-header">
         <div>
-          <h1>
-            <FaCog className="header-icon" />
-            Settings
-          </h1>
+          <h1><FaCog className="header-icon" /> Settings</h1>
           <p>Control your app preferences, notifications, and detection behavior.</p>
         </div>
         <button className="restore-btn" onClick={handleRestoreDefaults}>
@@ -301,72 +279,6 @@ const Settings = () => {
               />
               <span className="toggle-slider"></span>
             </label>
-          </div>
-        </div>
-
-        {/* ── NOTIFICATIONS SECTION ── */}
-        <div className="settings-section">
-          <div className="section-header">
-            <FaBell className="section-icon" />
-            <h2>Notifications</h2>
-          </div>
-          <div className="setting-item">
-            <div className="setting-info">
-              <h3>Enable Notifications</h3>
-              <p>Receive alerts when new sounds are detected.</p>
-            </div>
-            <label className="toggle-switch">
-              <input
-                type="checkbox"
-                checked={settings.notifications}
-                onChange={() => handleToggle('notifications')}
-              />
-              <span className="toggle-slider"></span>
-            </label>
-          </div>
-          <div className="setting-item">
-            <div className="setting-info">
-              <h3>Auto-Save Settings</h3>
-              <p>Save preferences changes automatically as soon as you update them.</p>
-            </div>
-            <label className="toggle-switch">
-              <input
-                type="checkbox"
-                checked={settings.autoSave}
-                onChange={() => handleToggle('autoSave')}
-              />
-              <span className="toggle-slider"></span>
-            </label>
-          </div>
-        </div>
-
-        {/* ── DETECTION SECTION ── */}
-        <div className="settings-section">
-          <div className="section-header">
-            <FaCog className="section-icon" />
-            <h2>Detection Settings</h2>
-          </div>
-          <div className="setting-item threshold-item">
-            <div className="setting-info">
-              <h3>Confidence Threshold</h3>
-              <p>Set the minimum detection confidence needed for alerts.</p>
-              <div className="threshold-value">{settings.confidenceThreshold}%</div>
-            </div>
-            <div className="threshold-control">
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={settings.confidenceThreshold}
-                onChange={handleSliderChange}
-                className="threshold-slider"
-              />
-              <div className="threshold-labels">
-                <span>Low (0%)</span>
-                <span>Balanced (50%)</span>
-                <span>High (100%)</span>
-              </div>
-            </div>
           </div>
           <div className="setting-item">
             <div className="setting-info">
