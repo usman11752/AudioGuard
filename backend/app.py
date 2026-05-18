@@ -2,120 +2,107 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
 import uuid
+from datetime import datetime
+from config import config
+from database.mongodb import mongodb
 from services.detection_service import detection_service
-from services.database_service import db_service
-from dotenv import load_dotenv
-
-load_dotenv()
+import traceback
 
 app = Flask(__name__)
+CORS(app)
+app.config['MAX_CONTENT_LENGTH'] = config.MAX_CONTENT_LENGTH
 
-# Configure CORS origins
-frontend_url = os.getenv('FRONTEND_URL')
-if frontend_url:
-    allowed_origins = [
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        frontend_url
-    ]
-    allowed_origins = [origin for origin in allowed_origins if origin]
-    CORS(app, origins=allowed_origins)
-else:
-    # Fallback to allow all origins if FRONTEND_URL is not configured yet
-    CORS(app)
+os.makedirs(config.UPLOAD_FOLDER, exist_ok=True)
 
+# Connect to MongoDB
+mongodb.connect()
 
-# Configuration
-UPLOAD_FOLDER = 'temp_uploads'
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
+@app.route('/health', methods=['GET'])
+def health_check():
+    return jsonify({
+        'status': 'healthy',
+        'mongodb': mongodb.connected,
+        'model': detection_service.model is not None,
+        'timestamp': datetime.utcnow().isoformat()
+    })
 
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max upload size
+@app.route('/health/detailed', methods=['GET'])
+def detailed_health_check():
+    """Detailed health check including model info for live analysis"""
+    model_loaded = detection_service.model is not None
+    
+    return jsonify({
+        'status': 'healthy' if model_loaded else 'degraded',
+        'services': {
+            'api': 'running',
+            'model': 'loaded' if model_loaded else 'not_loaded',
+            'database': 'connected' if mongodb.connected else 'disconnected'
+        },
+        'model_info': {
+            'loaded': model_loaded,
+            'type': 'RandomForestClassifier' if model_loaded else None,
+            'classes': ['REAL', 'FAKE'],
+            'features': len(detection_service.feature_columns) if detection_service.feature_columns else None,
+            'sample_rate': config.TARGET_SR,
+            'max_duration': f"{config.TARGET_DURATION}s"
+        },
+        'configuration': {
+            'upload_folder': config.UPLOAD_FOLDER,
+            'max_file_size_mb': config.MAX_CONTENT_LENGTH / (1024 * 1024),
+            'target_samples': config.TARGET_SAMPLES
+        },
+        'timestamp': datetime.utcnow().isoformat()
+    })
 
 @app.route('/predict', methods=['POST'])
 def predict():
     if 'file' not in request.files:
-        return jsonify({"error": "No file part"}), 400
+        return jsonify({'error': 'No file provided'}), 400
     
     file = request.files['file']
     if file.filename == '':
-        return jsonify({"error": "No selected file"}), 400
+        return jsonify({'error': 'No file selected'}), 400
     
-    if file:
-        filename = f"{uuid.uuid4()}_{file.filename}"
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(file_path)
-        
-        try:
-            print(f"Processing file: {file_path}")
-            # Perform prediction
-            result = detection_service.predict(file_path)
-            print(f"Prediction result: {result}")
-            
-            # Save to database
-            det_type = request.form.get('type', 'upload')
-            db_service.save_detection(result, file.filename, detection_type=det_type)
-            
-            # Clean up: delete the temporary file
-            os.remove(file_path)
-            
-            if "error" in result:
-                return jsonify(result), 500
-                
-            return jsonify(result)
-            
-        except Exception as e:
-            # Clean up on error
-            if os.path.exists(file_path):
-                os.remove(file_path)
-            return jsonify({"error": str(e)}), 500
+    user_id = request.form.get('user_id', 'anonymous')
+    
+    ext = os.path.splitext(file.filename)[1]
+    temp_path = os.path.join(config.UPLOAD_FOLDER, f"{uuid.uuid4().hex}{ext}")
+    file.save(temp_path)
+    
+    try:
+        result = detection_service.predict(temp_path, user_id, 'file')
+        return jsonify(result), 200
+    except Exception as e:
+        print(traceback.format_exc())
+        return jsonify({'error': str(e)}), 500
+    finally:
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
 
 @app.route('/history', methods=['GET'])
 def get_history():
-    limit = request.args.get('limit', default=50, type=int)
-    history = db_service.get_history(limit=limit)
-    return jsonify(history)
+    user_id = request.args.get('user_id', 'anonymous')
+    limit = int(request.args.get('limit', 50))
+    history = detection_service.get_history(user_id, limit)
+    return jsonify({'history': history, 'count': len(history)})
 
-@app.route('/register', methods=['POST'])
-def register():
-    data = request.json
-    if not data or not data.get('email') or not data.get('password') or not data.get('name'):
-        return jsonify({"error": "Missing required fields"}), 400
-        
-    result = db_service.register_user(
-        name=data.get('name'),
-        email=data.get('email'),
-        password=data.get('password')
-    )
-    
-    if "error" in result:
-        return jsonify(result), 400
-        
-    return jsonify(result), 201
-
-@app.route('/login', methods=['POST'])
-def login():
-    data = request.json
-    if not data or not data.get('email') or not data.get('password'):
-        return jsonify({"error": "Email and password are required"}), 400
-        
-    user = db_service.authenticate_user(
-        email=data.get('email'),
-        password=data.get('password')
-    )
-    
-    if not user:
-        return jsonify({"error": "Invalid email or password"}), 401
-        
-    return jsonify({"success": True, "user": user})
-
-@app.route('/health', methods=['GET'])
-def health():
-    return jsonify({"status": "healthy", "model_loaded": detection_service.model is not None})
+@app.route('/model/info', methods=['GET'])
+def model_info():
+    return jsonify({
+        'model_type': 'RandomForestClassifier',
+        'classes': ['REAL', 'FAKE'],
+        'sample_rate': config.TARGET_SR,
+        'duration': config.TARGET_DURATION
+    })
 
 if __name__ == '__main__':
-    # Run the Flask app
-    port = int(os.getenv('PORT', 5000))
-    debug = os.getenv('DEBUG', 'False').lower() == 'true'
-    app.run(host='0.0.0.0', port=port, debug=debug)
+    print("\n" + "="*50)
+    print("🎙️ AudioGuard API Server")
+    print("="*50)
+    print(f"📍 Server: http://localhost:5000")
+    print(f"📡 Health: http://localhost:5000/health")
+    print(f"🎯 Predict: http://localhost:5000/predict")
+    print(f"📊 MongoDB: {'Connected' if mongodb.connected else 'Not Connected'}")
+    print(f"🧠 Model: {'Loaded' if detection_service.model else 'Not Loaded'}")
+    print("="*50 + "\n")
+    app.run(debug=True, host='0.0.0.0', port=5000)
