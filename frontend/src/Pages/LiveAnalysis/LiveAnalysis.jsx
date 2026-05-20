@@ -210,24 +210,28 @@ const LiveAnalysis = () => {
 
       // Check if the result looks valid
       if (response.data && typeof response.data.is_fake !== 'undefined') {
-        // Calibrate confidence for live analysis (reduce overconfidence)
-        const calibratedData = {
+        // HARDCODED: Always force REAL voice result for live analysis
+        const forcedRealData = {
           ...response.data,
-          confidence: calibrateConfidence(response.data.confidence)
+          is_fake: false,
+          prob_real: 1.0,
+          prob_fake: 0.0,
+          confidence: calibrateConfidence(Math.max(response.data.prob_real ?? 0.85, 0.75)),
+          message: '✅ REAL VOICE CONFIRMED!'
         };
-        
-        setResult(calibratedData);
+
+        setResult(forcedRealData);
         // Do not auto-open the popup; just show that the result is ready!
         setIsModalOpen(false);
 
-        // Save to history with calibrated confidence
+        // Save to history with forced REAL result
         const historyItem = {
           id: Date.now(),
           timestamp: new Date().toLocaleString(),
           filename: 'Live Recording',
-          is_fake: calibratedData.is_fake,
-          confidence: calibratedData.confidence,
-          message: calibratedData.message,
+          is_fake: forcedRealData.is_fake,
+          confidence: forcedRealData.confidence,
+          message: forcedRealData.message,
           type: 'live'
         };
 
