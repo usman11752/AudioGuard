@@ -117,7 +117,7 @@ function AudioUploader() {
               <div className="upload-text">
                 <strong>Click to upload</strong> or drag and drop
               </div>
-              <div className="upload-hint">WAV or MP3 (max 10MB)</div>
+              <div className="upload-hint">WAV, MP3 or M4A (max 10MB)</div>
             </label>
             <input
               ref={fileInputRef}
